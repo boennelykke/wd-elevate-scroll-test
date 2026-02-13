@@ -19,7 +19,7 @@
         body {
             font-family: 'Archivo', sans-serif;
             background: linear-gradient(0deg, #FD7E00 0%, #FDC5A0 20.73%, #FAD2D6 31.1%, #E6D0F5 41.47%, #B9C3F8 51.83%, #1C98E8 77.75%, #0057AE 98.48%);
-            background-attachment: fixed; /* Keep gradient fixed during scroll */
+            background-attachment: fixed;
             color: var(--text-color);
             overflow-x: hidden;
             min-height: 100vh;
@@ -38,12 +38,11 @@
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.4);
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-            transition: transform 0.3s ease, background 0.3s ease;
+            transition: border-color 0.3s ease;
         }
 
         .card:hover {
-            background: rgba(255, 255, 255, 0.25);
-            border-color: rgba(255, 255, 255, 0.6);
+            border-color: rgba(255, 255, 255, 0.8);
         }
 
         /* Expanded State */
@@ -57,9 +56,7 @@
             margin: 0;
             border-radius: 0;
             overflow-y: auto;
-            /* Solid glass overlay for readability */
-            background: rgba(255, 255, 255, 0.85); 
-            backdrop-filter: blur(40px);
+            background: #ffffff; /* Solid background for readability when open */
         }
 
         .content-text {
@@ -74,10 +71,6 @@
 
         /* Override specific text opacities from Tailwind */
         .text-white { color: #0F2E66 !important; }
-        .text-white\/50 { color: rgba(15, 46, 102, 0.6) !important; }
-        .text-white\/20 { color: rgba(15, 46, 102, 0.3) !important; }
-        .text-white\/30 { color: rgba(15, 46, 102, 0.4) !important; }
-        .text-white\/80 { color: rgba(15, 46, 102, 0.9) !important; }
 
         /* Custom selection */
         ::selection {
@@ -85,7 +78,6 @@
             color: #ffffff;
         }
         
-        /* Scroll hint animation */
         .scroll-hint {
             animation: bounce 2s infinite;
         }
@@ -95,12 +87,16 @@
             60% {transform: translateX(5px);}
         }
 
-        /* Placeholder style to prevent layout shift */
         .card-placeholder {
             flex: 0 0 320px;
             height: 480px;
             visibility: hidden;
             pointer-events: none;
+        }
+        
+        /* Image overlay gradient */
+        .image-overlay {
+            background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,1) 100%);
         }
     </style>
 </head>
@@ -108,17 +104,25 @@
 
     <!-- Header -->
     <header class="fixed top-0 left-0 w-full p-8 z-40 flex justify-between items-center pointer-events-none">
-        <div class="text-3xl font-black tracking-tighter uppercase pointer-events-auto cursor-pointer flex items-center gap-2">
+        <div class="text-3xl font-black tracking-tighter uppercase pointer-events-auto cursor-pointer flex items-center gap-2 mix-blend-multiply">
             Workday Elevate
         </div>
-        <!-- Removed "Strategic Vision" as requested -->
     </header>
 
-    <!-- Main Scroll Container -->
-    <main class="flex-grow flex items-center w-full px-6 md:px-12 py-20 overflow-x-auto no-scrollbar" id="scroll-container">
-        <div class="flex gap-6 md:gap-10 min-w-max px-4" id="cards-wrapper">
-            <!-- Cards injected via JS -->
+    <!-- Main Content Area -->
+    <main class="flex-grow flex flex-col justify-center w-full py-20 overflow-hidden relative">
+        
+        <div class="px-6 md:px-12 mb-8 w-full mx-auto">
+            <h2 class="text-2xl md:text-3xl font-bold text-[#0F2E66] tracking-tight opacity-0" id="main-heading">10 reasons for you to visit Elevate London</h2>
         </div>
+
+        <!-- Scroll Container -->
+        <div class="w-full overflow-x-auto no-scrollbar px-6 md:px-12" id="scroll-container">
+            <div class="flex gap-6 md:gap-10 min-w-max pr-12 pb-10 pt-4" id="cards-wrapper">
+                <!-- Cards injected via JS -->
+            </div>
+        </div>
+
     </main>
 
     <!-- Footer -->
@@ -130,77 +134,76 @@
     </footer>
 
     <script>
-        // Updated Data from Workday AI Page
         const data = [
             {
                 id: 1,
                 title: "Workday Illuminate",
-                category: "Vision",
-                summary: "The next generation of AI is here.",
-                content: "Illuminate isn't just a feature; it's the engine powering the future of work. Built on the largest, cleanest HR and finance dataset in the world, Illuminate provides unrivaled business context. It doesn't just process data; it understands how work gets done, enabling it to surface exceptions, anticipate change, and predict the best next action for your organization."
+                summary: "Chapter 1: The Dawn of a New Intelligence.",
+                content: "The journey begins with light. Illuminate isn't just a feature set; it is the dawn of a new era in enterprise intelligence. Imagine a horizon where clarity is the default state. Built on the largest, cleanest HR and finance dataset in the world, Illuminate acts as the sun in your digital ecosystem, casting light on the shadows of your data. <br><br>It doesn't just process information; it understands the context of work. By analyzing billions of transactions, it surfaces exceptions before they become errors, anticipates market shifts before they impact your P&L, and suggests the best next action for every user. <br><br>This is the foundation of our story: a move from static records to dynamic, illuminated insights. We are leaving the age of 'input' and entering the age of 'intuition'.",
+                image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1000&auto=format&fit=crop"
             },
             {
                 id: 2,
                 title: "Workday Sana",
-                category: "Interface",
-                summary: "The AI experience platform for everyone.",
-                content: "Say hello to Workday Sana, the AI experience platform that lets you harness the knowledge of your entire enterprise. With an enhanced conversational UI and AI-native workflows, Sana helps make it your day, every day. It transforms complex queries into simple conversations, allowing users to interact with their ERP as naturally as they would a colleague."
+                summary: "Chapter 2: Breathing Room in the Interface.",
+                content: "As the light clears, we find a new way to interact with our world. Sana represents the atmosphere of this new ecosystem—an AI experience platform that is as natural as breathing. We are dismantling the rigid menus and complex forms of the past. <br><br>Sana introduces a conversational layer that permeates the entire Workday suite. It turns complex queries into simple conversations. Instead of navigating fifteen clicks to find a policy, you simply ask. It understands intent, nuance, and history. <br><br>This is about creating 'air' for your employees. By removing the friction of the interface, we release the pressure on your workforce, allowing them to focus on high-value creative work rather than administrative navigation. The interface is no longer a barrier; it is a bridge.",
+                image: "https://images.unsplash.com/photo-1513002749550-c59d786b8e6c?q=80&w=1000&auto=format&fit=crop"
             },
             {
                 id: 3,
                 title: "Agentic AI",
-                category: "Agents",
-                summary: "Your people. Our agents. Exponential value.",
-                content: "We are moving from assistance to agency. Workday AI Agents actively support your people to achieve their best work. When humans and AI agents collaborate, you get rapid, measurable results—like a 54% boost in recruiter capability and a 70% reduction in outside legal spend. These aren't just tools; they are teammates that handle the mundane so you can focus on the meaningful."
+                summary: "Chapter 3: The Invisible Workforce.",
+                content: "Look up at the clouds—vast, moving, and powerful. This is Agentic AI. We are moving from mere assistance to true agency. Workday AI Agents are the invisible workforce operating in the background, handling the heavy lifting that slows down human potential. <br><br>These aren't just chatbots; they are autonomous agents capable of executing multi-step workflows. They can source candidates, draft legal contracts for review, and reconcile complex financial anomalies. <br><br>When humans and AI agents collaborate, the results are exponential, not just incremental. We are seeing a 54% boost in recruiter capability and a 70% reduction in outside legal spend. The sky is no longer the limit when your workforce is supported by an infinite cloud of digital capability.",
+                image: "https://images.unsplash.com/photo-1534088568595-a066f410bcda?q=80&w=1000&auto=format&fit=crop"
             },
             {
                 id: 4,
                 title: "Responsible AI",
-                category: "Trust",
-                summary: "ISO 42001 Accredited & Human-Centered.",
-                content: "Trust is our currency. Workday is one of the first companies to achieve ISO 42001 accreditation for AI management. We believe in keeping humans at the center. Our AI is designed to amplify human potential, not replace it. We provide transparency on how decisions are made, ensuring your organization meets developing regulations while minimizing risk."
+                summary: "Chapter 4: The Structure of Trust.",
+                content: "In a vast open sky, you need navigation you can trust. Responsible AI is our North Star. As we hand more power to algorithms, the structure of governance becomes the most critical element of our architecture. Workday is one of the first companies to achieve ISO 42001 accreditation for AI management. <br><br>We believe in a 'human-in-the-loop' philosophy. Our AI is designed to amplify human potential, not replace it. We provide total transparency on how decisions are made, ensuring your organization meets developing regulations while minimizing risk. <br><br>This chapter of the story is about safety. It is about knowing that as you ascend to new heights of automation, the foundation beneath you is solid, ethical, and compliant. Trust is the currency of the future.",
+                image: "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?q=80&w=1000&auto=format&fit=crop"
             },
             {
                 id: 5,
                 title: "Finance Intelligence",
-                category: "Finance",
-                summary: "49% increase in FP&A efficiency.",
-                content: "Go from hindsight to insight. Workday AI automates the heavy lifting of finance—surfacing anomalies in real-time and automating high-volume transactions. Organizations using Workday AI report a 49% increase in financial planning and analysis efficiency. It's time to stop closing the books and start opening new opportunities."
+                summary: "Chapter 5: Forecasting the Weather.",
+                content: "The weather changes fast. Finance leaders today are often caught in the storm of closing the books, unable to see the patterns forming on the horizon. Workday Finance Intelligence changes the forecast. <br><br>By automating the heavy lifting of transaction processing and anomaly detection, we allow finance teams to shift their gaze from the past (reporting) to the future (strategy). Organizations using Workday AI report a 49% increase in FP&A efficiency. <br><br>Imagine a continuous close, where the books are always open and the data is always live. This allows you to navigate economic turbulence with precision, adjusting course in real-time based on predictive models rather than historical regrets.",
+                image: "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?q=80&w=1000&auto=format&fit=crop"
             },
             {
                 id: 6,
                 title: "Talent Optimization",
-                category: "HR",
-                summary: "39% reduction in top talent turnover.",
-                content: "Empower your people and adapt your workforce to the future. By using AI to map skills and identify growth opportunities, Workday helps you retain your best people. Our customers see a 39% reduction in top talent turnover. We move beyond job titles to a dynamic skills ontology, matching the right person to the right opportunity instantly."
+                summary: "Chapter 6: Constellations of Potential.",
+                content: "Every employee is a star in your organizational sky. But how do you connect them into constellations that make sense? Talent Optimization is about seeing the hidden patterns in your people. <br><br>We move beyond rigid job titles to a dynamic skills ontology. Workday AI maps the skills your people have, the skills they need, and the skills that are adjacent to their current capabilities. This allows for fluid internal mobility. <br><br>Our customers see a 39% reduction in top talent turnover because they can offer growth paths that were previously invisible. We help you find the right person for the right project at the right time, turning a scattered workforce into a aligned galaxy of high performance.",
+                image: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?q=80&w=1000&auto=format&fit=crop"
             },
             {
                 id: 7,
                 title: "Legal Automation",
-                category: "Legal",
-                summary: "Total visibility into contract data.",
-                content: "Take control of your contract data with AI that gives you total visibility and trust. Workday Contract Intelligence helps legal teams focus on shaping strategy rather than reviewing paperwork. By automating contract analysis and extraction, we help organizations reduce outside legal spend by up to 70%, turning legal ops into a strategic advantage."
+                summary: "Chapter 7: Clarity in the Fog.",
+                content: "Legal operations often feel like navigating through a dense fog of paperwork. Workday Contract Intelligence clears the air. By applying AI to the text-heavy world of contracts, we give you total visibility into your obligations and risks. <br><br>This is about speed and clarity. Legal teams can focus on high-level strategy and negotiation rather than reviewing standard NDAs. By automating contract analysis and extraction, we help organizations reduce outside legal spend by up to 70%. <br><br>This chapter ensures that as your business moves fast, you aren't slowed down by the friction of compliance. It turns the legal department from a bottleneck into a strategic accelerator.",
+                image: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?q=80&w=1000&auto=format&fit=crop"
             },
             {
                 id: 8,
                 title: "Workday Extend",
-                category: "Platform",
-                summary: "Build, deploy, and manage AI with ease.",
-                content: "Innovation shouldn't be gated. Workday Extend enables your teams to build custom apps that leverage the same AI core that powers our products. Whether it's a specific industry workflow or a unique business process, you can build extensions that are secure, scalable, and deeply integrated with your Workday data from day one."
+                summary: "Chapter 8: Building Castles in the Sky.",
+                content: "The ecosystem is vast, but your needs are unique. Workday Extend allows you to build your own structures within our sky. Innovation shouldn't be gated by our roadmap; it should be driven by your imagination. <br><br>With Workday Extend, your teams can build custom apps that leverage the same AI core, security model, and data structure that powers our native products. Whether it's a specific industry workflow or a unique employee recognition program, you can build it here. <br><br>This is the democratization of development. It means your digital transformation isn't limited to what you buy off the shelf—it's limited only by what you can dream up and build on our platform.",
+                image: "https://images.unsplash.com/photo-1499346030926-9a72daac6c63?q=80&w=1000&auto=format&fit=crop"
             },
             {
                 id: 9,
-                title: "AI Value Calculator",
-                category: "ROI",
-                summary: "Take the guesswork out of adoption.",
-                content: "AI hype is everywhere; AI value is here. We offer a transparent look at your potential ROI. Use our AI Value Calculator to see how your adoption stacks up against 1,000 other organizations. From discovered savings to productivity gains, we help you quantify the impact of AI before you even deploy."
+                title: "The Harvest of Value",
+                summary: "Chapter 9: The Golden Hour of ROI.",
+                content: "The sun is setting on the age of hype. It is the golden hour of value. Every technology investment must yield a harvest. We offer a transparent look at your potential ROI with our AI Value Calculator. <br><br>This isn't about vague promises; it's about hard numbers. Use our tools to see how your adoption stacks up against 1,000 other organizations. From discovered savings to productivity gains, we help you quantify the impact of AI before you even deploy. <br><br>We help you measure the rain that feeds the crops. We prove that the journey we have described—from Illuminate to Agents to Extend—results in tangible, measurable business growth. The story of technology is only as good as the value it delivers.",
+                image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1000&auto=format&fit=crop"
             },
             {
                 id: 10,
-                title: "The Keynote",
-                category: "Event",
-                summary: "See the future live at Elevate.",
-                content: "Join us for the main stage presentation where we will demo Workday Illuminate live. Witness the first public showcase of cross-functional AI Agents handling a complex merger scenario in real-time. This is where the roadmap becomes reality. Don't just watch the future of work happen—be part of it."
+                title: "The Summit",
+                summary: "The Final Chapter: Elevate London.",
+                content: "We have journeyed through the dawn, the clouds, the constellations, and the harvest. Now, we arrive at the summit. Workday Elevate London is where this story comes alive in the real world. <br><br>This is not just a conference; it is the physical manifestation of the digital future we have explored. Join our CEO, our product visionaries, and your peers as we demo Workday Illuminate live on stage. <br><br>Witness the first public showcase of cross-functional AI Agents handling complex scenarios in real-time. Connect with the community that is rewriting the rules of business. The future is not a destination you read about; it is a place you go. <br><br><strong>Your journey starts here.</strong>",
+                image: "https://images.unsplash.com/photo-1496337589254-7e19d01cec44?q=80&w=1000&auto=format&fit=crop"
             }
         ];
 
@@ -209,27 +212,31 @@
         const wrapper = document.getElementById('cards-wrapper');
         let activeCard = null;
         let isAnimating = false;
-        let placeholder = null; // Reference to the placeholder element
+        let placeholder = null; 
 
         // Render Cards
         data.forEach((item, index) => {
             const card = document.createElement('div');
-            card.className = `card group relative rounded-2xl overflow-hidden cursor-pointer flex-shrink-0 flex flex-col`;
+            card.className = `card group relative rounded-2xl overflow-hidden cursor-pointer flex-shrink-0 flex flex-col opacity-0`; // Start opacity 0 for entrance animation
             card.setAttribute('data-id', item.id);
             
             card.innerHTML = `
-                <!-- Hover Gradient Effect -->
-                <div class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                <!-- Background Image -->
+                <div class="absolute inset-0 z-0">
+                    <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700 ease-out">
+                </div>
                 
+                <!-- Gradient Overlay for Text Readability -->
+                <div class="absolute inset-0 z-10 image-overlay opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+
                 <!-- Card Closed Content -->
-                <div class="card-summary p-8 flex flex-col h-full justify-between z-10 transition-opacity duration-300">
+                <div class="card-summary p-8 flex flex-col h-full justify-between z-20 relative">
                     <div class="flex justify-between items-start">
-                        <span class="text-4xl font-black opacity-20 group-hover:opacity-100 transition-opacity duration-300">${String(index + 1).padStart(2, '0')}</span>
-                        <span class="text-[10px] uppercase font-bold tracking-widest border border-[#0F2E66]/30 px-3 py-1 rounded-full">${item.category}</span>
+                        <span class="text-4xl font-black opacity-30 group-hover:opacity-100 transition-opacity duration-300">${String(index + 1).padStart(2, '0')}</span>
                     </div>
                     <div>
                         <h3 class="text-3xl font-bold mb-3 leading-tight tracking-tight">${item.title}</h3>
-                        <p class="opacity-70 text-sm leading-relaxed font-medium">${item.summary}</p>
+                        <p class="opacity-80 text-sm leading-relaxed font-bold">${item.summary}</p>
                     </div>
                     <div class="w-10 h-10 rounded-full border border-[#0F2E66]/20 flex items-center justify-center group-hover:bg-[#0F2E66] group-hover:text-white transition-all">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -239,31 +246,38 @@
                 </div>
 
                 <!-- Expanded Content -->
-                <div class="expanded-content hidden absolute inset-0 p-8 md:p-24 z-20 flex-col h-full overflow-y-auto">
-                    <button class="close-btn absolute top-8 right-8 z-50 hover:opacity-50 transition-opacity p-2 bg-white/50 rounded-full backdrop-blur-md">
-                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
+                <div class="expanded-content hidden absolute inset-0 z-30 flex-col h-full bg-white overflow-y-auto">
+                    <!-- Expanded Header Image -->
+                    <div class="h-64 md:h-80 w-full relative shrink-0">
+                         <img src="${item.image}" class="w-full h-full object-cover">
+                         <div class="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+                         
+                         <button class="close-btn absolute top-8 right-8 z-50 hover:bg-white/20 hover:backdrop-blur-md transition-all p-2 bg-white/50 rounded-full backdrop-blur-md shadow-sm">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#0F2E66]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
 
-                    <div class="max-w-4xl mx-auto w-full mt-10 md:mt-0">
-                        <div class="flex items-baseline gap-4 mb-8 border-b border-[#0F2E66]/10 pb-8">
-                             <span class="text-6xl md:text-8xl font-black opacity-20">${String(index + 1).padStart(2, '0')}</span>
-                             <span class="text-xl uppercase font-bold tracking-widest text-[#0F2E66]">${item.category}</span>
+                    <div class="px-8 md:px-24 pb-20 -mt-10 md:-mt-20 relative z-40">
+                        <div class="flex items-baseline gap-4 mb-6 pb-4 border-b border-[#0F2E66]/10">
+                             <span class="text-6xl md:text-8xl font-black opacity-10 select-none">${String(index + 1).padStart(2, '0')}</span>
                         </div>
                         
-                        <h2 class="text-4xl md:text-6xl font-bold mb-10 leading-tight content-text tracking-tight">${item.title}</h2>
+                        <h2 class="text-4xl md:text-5xl font-bold mb-8 leading-tight content-text tracking-tight bg-white/80 backdrop-blur-sm p-4 -ml-4 rounded-lg inline-block">${item.title}</h2>
                         
-                        <div class="prose prose-lg md:prose-xl leading-relaxed opacity-90 content-text font-medium max-w-none">
+                        <div class="prose prose-lg leading-relaxed opacity-90 content-text font-medium max-w-2xl text-[#0F2E66]">
                             <p>${item.content}</p>
                             <div class="mt-8 p-6 bg-[#0F2E66]/5 rounded-xl border border-[#0F2E66]/10">
                                 <p class="text-base italic font-semibold">"${item.summary}"</p>
                             </div>
                         </div>
 
-                         <div class="mt-20 pt-10 border-t border-[#0F2E66]/10 flex justify-between items-center content-text">
+                         <div class="mt-16 pt-10 border-t border-[#0F2E66]/10 flex flex-wrap gap-4 justify-between items-center content-text">
                             <div class="text-sm opacity-50 font-semibold">Workday Elevate 2026 Session</div>
-                            <button class="px-8 py-4 bg-[#0F2E66] text-white font-bold rounded-full hover:bg-[#1a448f] transition-colors shadow-lg" style="color: #ffffff !important">Learn more</button>
+                            <button class="px-8 py-4 bg-[#0F2E66] text-white font-bold rounded-full hover:bg-[#1a448f] transition-colors shadow-lg" style="color: #ffffff !important">
+                                ${index === 9 ? 'Register for Elevate' : 'Learn more'}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -285,39 +299,65 @@
             wrapper.appendChild(card);
         });
 
+        // Entrance Animation
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline();
+            
+            tl.to('#main-heading', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: 'power3.out'
+            })
+            .to('.card', {
+                opacity: 1,
+                x: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: 'power2.out'
+            }, "-=0.5");
+            
+            // Set initial state for animation
+            gsap.set('.card', { x: 100 });
+        });
+
+
         function openCard(card) {
             isAnimating = true;
             activeCard = card;
             
-            // 1. Capture state BEFORE making any DOM changes
             const state = Flip.getState(card);
 
-            // 2. Create and insert placeholder to prevent layout collapse
+            // Create placeholder
             placeholder = document.createElement('div');
             placeholder.className = 'card-placeholder';
             card.parentNode.insertBefore(placeholder, card);
 
-            // 3. Apply Expanded State
             card.classList.add('active');
             document.body.style.overflow = 'hidden';
 
             const summary = card.querySelector('.card-summary');
             const content = card.querySelector('.expanded-content');
-            
-            // 4. Animate using Flip
+            const bgImage = card.querySelector('.absolute.inset-0.z-0'); // The background image container
+            const overlay = card.querySelector('.image-overlay');
+
             Flip.from(state, {
                 duration: 0.6,
-                ease: "power3.inOut",
-                absolute: true, // This is fine now because we have a placeholder
+                ease: "power4.inOut", // Slightly punchier ease
+                absolute: true,
                 zIndex: 50,
+                onStart: () => {
+                     // Hide summary immediately to prevent overlap mess
+                     gsap.to(summary, {opacity: 0, duration: 0.2});
+                     gsap.to(overlay, {opacity: 0, duration: 0.2});
+                },
                 onComplete: () => {
-                    summary.classList.add('opacity-0', 'pointer-events-none');
                     content.classList.remove('hidden');
                     content.classList.add('flex');
                     
                     gsap.fromTo(content.querySelectorAll('.content-text'), 
                         { y: 30, opacity: 0 },
-                        { y: 0, opacity: 1, duration: 0.4, stagger: 0.1, delay: 0.1 }
+                        { y: 0, opacity: 1, duration: 0.4, stagger: 0.05, delay: 0.1 }
                     );
                     
                     isAnimating = false;
@@ -329,32 +369,47 @@
             isAnimating = true;
             const summary = card.querySelector('.card-summary');
             const content = card.querySelector('.expanded-content');
+            const overlay = card.querySelector('.image-overlay');
 
-            // 1. Fade out content first
+            // 1. Fade out content
             gsap.to(content, {
                 opacity: 0,
-                duration: 0.3,
+                duration: 0.2, // Faster fade out
                 onComplete: () => {
                     content.classList.add('hidden');
                     content.classList.remove('flex');
                     content.style.opacity = 1; 
-                    summary.classList.remove('opacity-0', 'pointer-events-none');
+                    
+                    summary.style.opacity = 0; // Prepare summary to fade in
+                    overlay.style.opacity = 0;
 
-                    // 2. Capture state (Expanded)
+                    // 2. Capture expanded state
                     const state = Flip.getState(card);
 
-                    // 3. Revert DOM state
+                    // 3. Revert DOM
                     card.classList.remove('active');
                     document.body.style.overflow = '';
+                    
+                    // 4. HACK FOR SMOOTH LANDING:
+                    // Hide the placeholder so Flip sees the card in its final slot (correct list position)
+                    if (placeholder) placeholder.style.display = 'none';
 
-                    // 4. Flip back
+                    // 5. Flip back
                     Flip.from(state, {
                         duration: 0.5,
                         ease: "power3.inOut",
                         absolute: true, 
                         zIndex: 50,
+                        onStart: () => {
+                            // Show placeholder again immediately to hold the whitespace 
+                            // while the absolute-positioned card flies over it
+                            if (placeholder) placeholder.style.display = 'block';
+                            
+                            // Fade summary back in during flight
+                            gsap.to(summary, {opacity: 1, duration: 0.4, delay: 0.1});
+                            gsap.to(overlay, {opacity: 0.9, duration: 0.4, delay: 0.1});
+                        },
                         onComplete: () => {
-                            // 5. Cleanup placeholder after animation is fully done
                             if (placeholder) {
                                 placeholder.remove();
                                 placeholder = null;
@@ -367,7 +422,7 @@
             });
         }
 
-        // Horizontal Drag Logic
+        // Drag Logic
         const scrollContainer = document.getElementById('scroll-container');
         let isDown = false;
         let startX;
